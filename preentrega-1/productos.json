@@ -1,0 +1,67 @@
+[
+  {
+    "title": "buso",
+    "description": "rosa",
+    "price": "2000",
+    "thumbnail": [
+      "buso.jpg"
+    ],
+    "code": "qwe123",
+    "stock": "10",
+    "status": "true",
+    "category": "ropa",
+    "id": 1
+  },
+  {
+    "title": "campera",
+    "description": "gris",
+    "price": "4000",
+    "thumbnail": [
+      "campera.jpg"
+    ],
+    "code": "tyu123",
+    "stock": "10",
+    "status": "true",
+    "category": "ropa",
+    "id": 2
+  },
+  {
+    "title": "blusa",
+    "description": "amarilla",
+    "price": "2000",
+    "thumbnail": [
+      "blusa_amarilla.jpg"
+    ],
+    "code": "dfg123",
+    "stock": "10",
+    "status": "true",
+    "category": "ropa",
+    "id": 3
+  },
+  {
+    "title": "remera",
+    "description": "blanca, negra, gris",
+    "price": "1000",
+    "thumbnail": [
+      "remera.jpg"
+    ],
+    "code": "fgh123",
+    "stock": "50",
+    "status": "true",
+    "category": "ropa",
+    "id": 4
+  },
+  {
+    "title": "jean",
+    "description": "azul",
+    "price": "4000",
+    "thumbnail": [
+      "jean.jpg"
+    ],
+    "code": "yui123",
+    "stock": "10",
+    "status": "true",
+    "category": "ropa",
+    "id": 5
+  }
+]
