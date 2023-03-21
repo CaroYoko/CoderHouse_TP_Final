@@ -4,7 +4,7 @@ import ProductManager from "../dao/mongoDB/controllers/ProductManager.js";
 
 const routerSocket = Router();
 
-routerSocket.get("/", async(req,res) => {
+routerSocket.get("/products", async(req,res) => {
   const productManager = new ProductManager();
   let productos = await productManager.getProducts({limit:3});
 
