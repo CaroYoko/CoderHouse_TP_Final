@@ -17,7 +17,6 @@ class UserController {
                 })
             } else {
                 const hashPassword = createHash(password)
-                console.log(hashPassword)
                 const userCreated = await managerUser.addUsers([{
                     first_name: first_name,
                     last_name: last_name,
