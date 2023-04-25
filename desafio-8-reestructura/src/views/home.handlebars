@@ -1,0 +1,25 @@
+<button id="btnLogout">Logout</button>
+<h1>¡Hola {{userName}}!</h1>
+<h2>Productos</h2>
+<div id="pagina" numeroPagina={{paginationData.page}} paginasTotales= {{paginationData.totalPages}}>
+    <ul id="productList">
+        {{#each productos}}
+        <li>
+            {{this.title}}
+            <ul>
+                <li>Descripcion: {{this.description}}</li>
+                <li>Precio: ${{this.price}}</li>
+                <li>Codigo: {{this.code}}</li>
+                <li>Stock: {{this.stock}}</li>
+                <li>Categoria: {{this.category}}</li>
+                <li>Status: {{this.status}}</li>
+                <li> {{this.thumbnail}}</li>
+                <button name="btnAgregar">Agregar</button>
+            </ul>
+        </li>
+        {{/each}}
+    </ul>
+    <button id="btnAnterior">Anterior</button>
+    <label id="label"> {{paginationData.page}} de {{paginationData.totalPages}}</label>
+    <button id="btnSiguiente">Siguiente</button>
+</div>
