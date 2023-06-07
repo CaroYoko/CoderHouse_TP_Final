@@ -26,20 +26,17 @@ class CartManager {
   async addProductIntoCart(idCarrito, idProducto, user) {
     let productManager = new ProductManager();
     let carrito = await this.getCartById(idCarrito);
+    let product = await productManager.getProductById(idProducto);
     
     if (!carrito.products) { carrito.products = []; }
     
     let productoEnCarrito = carrito.products.find(({product}) => product._id.equals(idProducto));
 
-    console.log("owner", productoEnCarrito.owner)
-    console.log("user email", user.email)
-
-    if(user.rol === "Premium" && user.email === productoEnCarrito.owner) throw new Error("Usuario Premium no puede agregar al carrito su propio producto");    
+    if(user.rol === "Premium" && user.email === product.owner) throw new Error("Usuario Premium no puede agregar al carrito su propio producto");    
     
     if (productoEnCarrito) {
       productoEnCarrito.quantity++;
     } else {
-      const product = await productManager.getProductById(idProducto);
       if(!product) { throw new Error("El producto no existe") }
       carrito.products.push({ product: idProducto, quantity: 1 });
     }

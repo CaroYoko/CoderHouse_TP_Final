@@ -133,8 +133,6 @@ export const recoverPassword = async (req, res, next) => {
 
     const userBDD = await managerUser.getUserByEmail(req.user.email)
 
-    console.log(userBDD)
-
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
         if (err) {
             // Token no valido                           
@@ -193,7 +191,8 @@ export const forgotPassword = async (req, res, next) => {
 }
 
 export const changeRolUser = async (req, res, next) => {
-    const userBDD = await managerUser.getUserById(req.params.id);
+
+    const userBDD = await managerUser.getUserById(req.params.uid);
     userBDD.rol = userBDD.rol === "User" ? "Premium" : "User"; 
     userBDD.save(); 
     res.status(200).json({ rol: userBDD.rol });  
