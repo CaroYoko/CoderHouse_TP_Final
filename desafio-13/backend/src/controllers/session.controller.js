@@ -195,7 +195,7 @@ export const addDocumentsUser = async (req, res, next) => {
 
     documents.forEach(doc => {
         if (!userBDD.documents.find(({name}) => name === doc)) {
-            userBDD.documents.push({ name: doc, reference: `http://localhost:5000/img/${doc}` })
+            userBDD.documents.push({ name: doc, reference: `http://localhost:5000/img/documents/${doc}` })
         }
     });    
     userBDD.save();

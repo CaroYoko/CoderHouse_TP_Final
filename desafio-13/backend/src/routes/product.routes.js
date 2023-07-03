@@ -8,7 +8,7 @@ const productController = new ProductController();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'src/public/img')
+        cb(null, 'src/public/img/products')
     },
     filename: (req, file, cb) => {
         cb(null, `${file.originalname}`)
