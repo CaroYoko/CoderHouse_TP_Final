@@ -34,6 +34,7 @@ Title.propTypes = {
 
 export default function Orders() {
   const [products, setProducts] = React.useState([]);
+  const [total, setTotal] = React.useState(0);
   const location = useLocation();
   const { cartid, token } = location.state;
 
@@ -54,6 +55,18 @@ export default function Orders() {
     };
     fetchProducts();
   }, []);
+  React.useEffect(() => {
+    const calculateTotal = () => {
+      let sum = 0;
+      products.forEach((product) => {
+        sum += product.product.price * product.quantity;
+      });
+      setTotal(sum);
+    };
+
+    calculateTotal();
+  }, [products]);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -112,7 +125,7 @@ export default function Orders() {
             >
               <Title>Total</Title>
               <Typography component="p" variant="h4">
-                $3,024.00
+              {`$${total.toFixed(2)}`}
               </Typography>
               <Typography color="text.secondary" sx={{ flex: 1 }}>
                 on 15 March, 2019
