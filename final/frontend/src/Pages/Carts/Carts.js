@@ -16,7 +16,13 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 
 const defaultTheme = createTheme();
 
@@ -32,29 +38,39 @@ Title.propTypes = {
   children: PropTypes.node,
 };
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function Orders() {
   const [products, setProducts] = React.useState([]);
   const [total, setTotal] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
   const location = useLocation();
   const { cartid, token } = location.state;
+  const navigate = useNavigate();
+
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/carts/${cartid}`
+      );
+      if (!response.ok) {
+        throw new Error('Error al obtener los productos');
+      }
+      const data = await response.json();
+      setProducts(data.products || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   React.useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/api/carts/${cartid}`
-        );
-        if (!response.ok) {
-          throw new Error('Error al obtener los productos');
-        }
-        const data = await response.json();
-        setProducts(data.products || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchProducts();
   }, []);
+
+
   React.useEffect(() => {
     const calculateTotal = () => {
       let sum = 0;
@@ -63,9 +79,60 @@ export default function Orders() {
       });
       setTotal(sum);
     };
-
     calculateTotal();
   }, [products]);
+
+  const handleDeleteProduct = async (productId) => {
+    const productToDelete = products.find(({ product }) => product._id === productId);
+    let updatedProducts;
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/carts/${cartid}/product/${productId}`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (response.ok) {
+        if (productToDelete && productToDelete.quantity === 1) {
+          updatedProducts = products.filter(({ product }) => product._id !== productId);;
+          setProducts(updatedProducts);
+        } else {
+          fetchProducts();
+        }
+      }
+    }
+    catch (error) {
+      console.log('Hubo un problema con la petición Fetch:' + error.message);
+    };
+
+  };
+
+  const handleFinalizePurchase = () => {
+    // Call the endpoint to finalize the purchase
+    fetch(`http://localhost:3000/api/carts/${cartid}/purchase`, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          setOpen(true);
+        } else {
+          throw new Error('Error al finalizar la compra');
+        }
+      })
+      .catch((error) => {
+        console.log('Hubo un problema con la petición Fetch:' + error.message);
+      });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    navigate('/products', { state: { cartid: cartid, token: token } });
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -100,10 +167,10 @@ export default function Orders() {
                 </TableHead>
                 <TableBody>
                   {products.map((product) => (
-                    <TableRow key={product._id}>
-                      <IconButton aria-label="delete" size="small">
+                    <TableRow key={product.product._id}>
+                      <IconButton aria-label="delete" size="small" onClick={() => handleDeleteProduct(product.product._id)}>
                         <HighlightOffIcon fontSize="small" />
-                      </IconButton>                      
+                      </IconButton>
                       <TableCell>{product.product.title}</TableCell>
                       <TableCell>{product.product.price}</TableCell>
                       <TableCell>{product.quantity}</TableCell>
@@ -125,16 +192,14 @@ export default function Orders() {
             >
               <Title>Total</Title>
               <Typography component="p" variant="h4">
-              {`$${total.toFixed(2)}`}
-              </Typography>
-              <Typography color="text.secondary" sx={{ flex: 1 }}>
-                on 15 March, 2019
+                {`$${total.toFixed(2)}`}
               </Typography>
               <div>
                 <Button
                   type="submit"
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  onClick={handleFinalizePurchase}
                 >
                   Finalizar compra
                 </Button>
@@ -143,6 +208,25 @@ export default function Orders() {
           </Grid>
         </Grid>
       </Container>
+      <div>
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{"GRACIAS POR SU COMPRA"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Te esperamos proximamente
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cerrar</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </ThemeProvider>
   );
 }

@@ -65,7 +65,6 @@ export default function SignIn() {
     }).catch(function (error) {
       console.log('Hubo un problema con la petición Fetch:' + error.message);
     });
-
   };
 
   return (

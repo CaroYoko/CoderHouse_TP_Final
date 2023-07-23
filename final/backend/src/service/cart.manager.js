@@ -49,17 +49,14 @@ class CartManager {
   };
 
   async deleteProductIntoCart(idCarrito, idProducto) {
-    let carrito = await this.getCartById(idCarrito);
-    console.log("carrito", carrito)
-
-    if (!carrito.products) { carrito.products = []; }
-
-    let productoEnCarrito = carrito.products.find(x => x._id.equals(idProducto));
+    let carrito = await this.getCartById(idCarrito);   
+    if (!carrito.products) { carrito.products = []; }    
+    let productoEnCarrito = carrito.products.find(({product})=> product._id.equals(idProducto));
     if(!productoEnCarrito) { throw new Error("El producto no existe o no esta en el carrito") }  
     if (productoEnCarrito && productoEnCarrito.quantity > 1) {
       productoEnCarrito.quantity--;      
     } else if(productoEnCarrito.quantity == 1) {      
-      const products = carrito.products.find((item) => item._id !== idProducto);
+      const products = carrito.products.find(({product}) => !product._id.equals(idProducto));
       carrito.products = products;
     }
     return await carrito.save();
@@ -85,7 +82,7 @@ class CartManager {
     
     let carrito = await this.getCartById(idCarrito);   
     if (!carrito.products) { carrito.products = []; }
-    let productoEnCarrito = carrito.products.find(x => x._id.equals(idProducto));    
+    let productoEnCarrito = carrito.products.find(({product})=> product._id.equals(idProducto));    
     if(!productoEnCarrito) { throw new Error("El producto no existe o no esta en el carrito") }    
     productoEnCarrito.quantity = cantidad;
     return await carrito.save();
