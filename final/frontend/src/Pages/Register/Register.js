@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
+const PORT = 3000;
+const defaultTheme = createTheme();
 
 function Copyright(props) {
   return (
@@ -29,10 +31,6 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
-
 export default function SignUp() {
   const navigate = useNavigate();
   const { handleSubmit, control, formState: { errors } } = useForm({mode: "all"});
@@ -42,7 +40,7 @@ export default function SignUp() {
   });
 
   const onSubmit = (data) => {
-    let url = `${window.location.protocol}//${window.location.hostname}:3000/api/users`;
+    let url = `${window.location.protocol}//${window.location.hostname}:${PORT}/api/users`;
     let user = {
       first_name: data.firstName,
       last_name: data.lastName,

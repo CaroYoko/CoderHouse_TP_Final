@@ -1,6 +1,5 @@
 import './App.css';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-
 import Cart from './Pages/Carts/Carts.js';
 import Product from './Pages/Products/Products.js';
 import Register from './Pages/Register/Register.js';

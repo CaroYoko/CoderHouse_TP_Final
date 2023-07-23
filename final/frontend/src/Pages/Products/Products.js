@@ -19,6 +19,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import IconButton from '@mui/material/IconButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+const PORT = 3000;
+const defaultTheme = createTheme();
 
 function Copyright() {
   return (
@@ -32,16 +34,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
-const styles = {
-  cartIcon: {
-    position: 'absolute',
-    right: 16,
-  },
-};
 
 export default function Album() {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -58,7 +50,7 @@ export default function Album() {
   const handleAddToCart = async (event, pid) => {
     try {
       event.preventDefault()
-      const response = await fetch(`http://localhost:3000/api/carts/${cartid}/product/${pid}`, {
+      const response = await fetch(`http://localhost:${PORT}/api/carts/${cartid}/product/${pid}`, {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -79,7 +71,7 @@ export default function Album() {
   const handleLogout = async (event) => {
     try {
       event.preventDefault()
-      const response = await fetch(`http://localhost:3000/api/session/logout`);
+      const response = await fetch(`http://localhost:${PORT}/api/session/logout`);
       if (!response.ok) throw new Error('Error al cerrar session');
       navigate("/login")
     } catch (error) {
@@ -90,7 +82,7 @@ export default function Album() {
   React.useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/products?limit=6&page=${currentPage}&sort=1`);
+        const response = await fetch(`http://localhost:${PORT}/api/products?limit=6&page=${currentPage}&sort=1`);
         if (!response.ok) {
           throw new Error('Error al obtener las cards');
         }
@@ -163,7 +155,7 @@ export default function Album() {
                       pt: '56.25%',
                       objectFit: 'cover'
                     }}
-                    image={`http://localhost:3000/img/products/${card.thumbnail[0]}`}
+                    image={`http://localhost:${PORT}/img/products/${card.thumbnail[0]}`}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">

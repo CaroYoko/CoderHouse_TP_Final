@@ -26,6 +26,7 @@ import Slide from '@mui/material/Slide';
 import { useCallback } from 'react';
 
 const defaultTheme = createTheme();
+const PORT = 3000;
 
 function Title(props) {
   return (
@@ -51,11 +52,10 @@ export default function Orders() {
   const { cartid, token } = location.state;
   const navigate = useNavigate();
 
-
   const fetchProducts = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/carts/${cartid}`
+        `http://localhost:${PORT}/api/carts/${cartid}`
       );
       if (!response.ok) {
         throw new Error('Error al obtener los productos');
@@ -67,22 +67,6 @@ export default function Orders() {
     }
   }, [cartid])
 
- /*
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/carts/${cartid}`
-      );
-      if (!response.ok) {
-        throw new Error('Error al obtener los productos');
-      }
-      const data = await response.json();
-      setProducts(data.products || []);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-*/
   React.useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -103,7 +87,7 @@ export default function Orders() {
     let updatedProducts;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/carts/${cartid}/product/${productId}`, {
+      const response = await fetch(`http://localhost:${PORT}/api/carts/${cartid}/product/${productId}`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json'
@@ -126,7 +110,7 @@ export default function Orders() {
 
   const handleFinalizePurchase = () => {
     // Call the endpoint to finalize the purchase
-    fetch(`http://localhost:3000/api/carts/${cartid}/purchase`, {
+    fetch(`http://localhost:${PORT}/api/carts/${cartid}/purchase`, {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${token}`,

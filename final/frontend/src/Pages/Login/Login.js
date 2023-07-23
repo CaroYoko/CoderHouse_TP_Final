@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Alert from '@mui/material/Alert';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -16,6 +14,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+
+const PORT = 3000;
+const defaultTheme = createTheme();
 
 function Copyright(props) {
   return (
@@ -30,10 +31,6 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-const defaultTheme = createTheme();
-
 export default function SignIn() {
   const navigate = useNavigate();
   const { handleSubmit, control, formState: { errors } } = useForm({ mode: "all" });
@@ -42,7 +39,7 @@ export default function SignIn() {
     menssage: ""
   });
   const onSubmit = (data) => {
-    let url = `${window.location.protocol}//${window.location.hostname}:3000/api/session/login`;
+    let url = `${window.location.protocol}//${window.location.hostname}:${PORT}/api/session/login`;
     const user = { email: data.email, password: data.password };
     fetch(url, {
       method: "POST",
