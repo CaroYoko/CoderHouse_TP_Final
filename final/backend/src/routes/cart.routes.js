@@ -13,6 +13,6 @@ routerCart.delete('/:cid', cartController.deleteAllProductsIntoCart.bind(cartCon
 routerCart.post('/:cid/product/:pid', passportError('jwt'), current(['User', 'Premium']), cartController.addProductIntoCart.bind(cartController));
 routerCart.put('/:cid/product/:pid', cartController.updateQuantityProductIntoCart.bind(cartController));
 routerCart.delete('/:cid/product/:pid', cartController.deleteProductIntoCart.bind(cartController));
-routerCart.post('/:cid/purchase', passportError('jwt'), cartController.finalizePurchase.bind(cartController)); //post?
+routerCart.post('/:cid/purchase', passportError('jwt'), current(['User']), cartController.finalizePurchase.bind(cartController));
 
 export default routerCart;

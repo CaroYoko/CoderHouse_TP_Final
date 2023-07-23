@@ -2,16 +2,8 @@ import UserManager from "../service/user.manager.js"
 import jwt from "jsonwebtoken";
 import { isValidPassword, createHash } from "../utils/bcrypt.js"
 import passport from "passport";
-import CartManager from "../service/cart.manager.js"
-import userService from '../dao/models/User.js';
-//import cartModel from "../dao/models/Cart.js";
-//import CustomError from "../errors/customError.js"
-//import EErrors from "../errors/enums.js"
-import { generateUserErrorInfo, generateUserExistErrorInfo, generateLoginErrorInfo } from "../errors/info.js"
-import { InvalidParamsError, UnauthorizedError, DICTIONARY_ERROR, translate } from "../utils/error.js"
-import { logger } from '../utils/logger.js';
+import { InvalidParamsError, UnauthorizedError, DICTIONARY_ERROR, translate } from "../utils/error.js";
 import { transport } from "../utils/mailing.js";
-
 
 const managerUser = new UserManager();
 
@@ -36,7 +28,7 @@ export const loginUser = async (req, res, next) => {
                     await managerUser.updateUserLastConnection(userBDD._id);
                     const token = jwt.sign({ user: { id: userBDD._id } }, process.env.JWT_SECRET);
                     res.cookie('jwt', token, { httpOnly: true });
-                    return res.status(200).json({ message: "Creedenciales validas", token: token, usercartid: userBDD.cart});
+                    return res.status(200).json( {message: "Bienvenido", token: token, usercartid: userBDD.cart});
                 }
                 const token = req.cookies.jwt;
                 await managerUser.updateUserLastConnection(user._id);
@@ -54,7 +46,6 @@ export const loginUser = async (req, res, next) => {
 
     } catch (error) {
         next(error);
-
     }
 }
 
@@ -62,7 +53,7 @@ export const destroySession = (req, res) => {
     if (req.cookies.jwt) {        
         res.clearCookie("jwt");
     }
-    res.redirect(`${req.protocol}://${req.get('host')}/`);
+    return res.send({ status: "success"})  
 }
 
 export const getSession = async (req, res) => {
@@ -70,22 +61,13 @@ export const getSession = async (req, res) => {
     const info = jwt.verify(token, process.env.JWT_SECRET);
     const user = await managerUser.getUserById(info.user.id);
 
-    if (user) return res.send({ status: "success", payload: user })
-    /*
-        try {
-            req.session.user ? res.status(200).json(req.session.user) : res.status(404).json({ message: "sesion no encontrada" });
-    
-        } catch (error) {
-            res.status(500).json({ message: error.message })
-        }
-    */
+    if (user) return res.send({ status: "success", payload: user })  
 }
 
 export const recoverPassword = async (req, res, next) => {
 
     const token = req.cookies.jwt;
     const { newpassword } = req.body;
-
     const userBDD = await managerUser.getUserByEmail(req.user.email)
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {

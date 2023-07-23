@@ -90,7 +90,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Crea un usuario
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -115,7 +115,7 @@ export default function SignUp() {
                       fullWidth
                       type="text"
                       id="firstName"
-                      label="First Name"
+                      label="Nombre"
                       autoFocus
                       error={Boolean(errors.firstName)}
                       helperText={errors.firstName?.message}
@@ -144,7 +144,7 @@ export default function SignUp() {
                       fullWidth
                       type="text"
                       id="lastName"
-                      label="Last Name"
+                      label="Apellido"
                       name="lastName"
                       autoComplete="family-name"
                       error={Boolean(errors.lastName)}
@@ -173,7 +173,7 @@ export default function SignUp() {
                       fullWidth
                       type="number"
                       id="age"
-                      label="Age"
+                      label="Edad"
                       name="age"
                       autoComplete="age"
                       error={Boolean(errors.age)}
@@ -202,7 +202,7 @@ export default function SignUp() {
                       fullWidth
                       type="email"
                       id="email"
-                      label="Email Address"
+                      label="Email"
                       name="email"
                       autoComplete="email"
                       error={Boolean(errors.email)}
@@ -230,7 +230,7 @@ export default function SignUp() {
                       required
                       fullWidth
                       name="password"
-                      label="Password"
+                      label="Contraseña"
                       type="password"
                       id="password"
                       autoComplete="new-password"
@@ -249,12 +249,12 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Registrarse
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="#" onClick={() => navigate("/login")} variant="body2">
-                  Already have an account? Sign in
+                  ¿Ya tienes una cuenta? Inicia sesión.
                 </Link>
               </Grid>
             </Grid>

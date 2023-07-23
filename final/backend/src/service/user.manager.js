@@ -15,7 +15,7 @@ class UserManager {
         return this.model.insertMany(elements).exec();
     }
 
-    async getUserById(id) {
+    async getUserById(id) { 
         return this.model.findById(id).exec();
     }
 

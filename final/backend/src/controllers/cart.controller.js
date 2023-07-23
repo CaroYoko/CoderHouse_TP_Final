@@ -80,7 +80,7 @@ class CartController {
   }
 
   async finalizePurchase(req, res) {
-    try {
+    try {      
       let mensaje = await cartsManagerMongoDB.finalizePurchase(req.params.cid, req.user);
       res.status(200).json(mensaje);
     } catch (e) {

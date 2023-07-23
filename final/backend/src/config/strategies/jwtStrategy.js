@@ -15,7 +15,6 @@ const jwtOptions = {
 export const strategyJWT = new JwtStrategy(jwtOptions, async (payload, done) => {
     try {        
         const user = await userManager.getUserById(payload.user.id);
-        
         if (!user) {
             return done(null, false)
         }

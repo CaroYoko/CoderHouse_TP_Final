@@ -23,6 +23,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import { useCallback } from 'react';
 
 const defaultTheme = createTheme();
 
@@ -51,6 +52,22 @@ export default function Orders() {
   const navigate = useNavigate();
 
 
+  const fetchProducts = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/carts/${cartid}`
+      );
+      if (!response.ok) {
+        throw new Error('Error al obtener los productos');
+      }
+      const data = await response.json();
+      setProducts(data.products || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [cartid])
+
+ /*
   const fetchProducts = async () => {
     try {
       const response = await fetch(
@@ -65,11 +82,10 @@ export default function Orders() {
       console.error(error);
     }
   };
-
+*/
   React.useEffect(() => {
     fetchProducts();
-  }, []);
-
+  }, [fetchProducts]);
 
   React.useEffect(() => {
     const calculateTotal = () => {

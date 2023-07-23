@@ -15,7 +15,7 @@ import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Badge from '@mui/material/Badge';
+import LogoutIcon from '@mui/icons-material/Logout';
 import IconButton from '@mui/material/IconButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -55,8 +55,9 @@ export default function Album() {
     setCurrentPage(page);
   };
 
-  const handleAddToCart = async (pid) => {
+  const handleAddToCart = async (event, pid) => {
     try {
+      event.preventDefault()
       const response = await fetch(`http://localhost:3000/api/carts/${cartid}/product/${pid}`, {
         method: 'POST',
         headers: {
@@ -73,14 +74,23 @@ export default function Album() {
     }
   };
 
-  const handleLookAtCart = async () => navigate("/carts", { state: { cartid: cartid, token: token } });  
+  const handleLookAtCart = async () => navigate("/carts", { state: { cartid: cartid, token: token } });
+
+  const handleLogout = async (event) => {
+    try {
+      event.preventDefault()
+      const response = await fetch(`http://localhost:3000/api/session/logout`);
+      if (!response.ok) throw new Error('Error al cerrar session');
+      navigate("/login")
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   React.useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/products?limit=6&page=${currentPage}&sort=1`
-        );
+        const response = await fetch(`http://localhost:3000/api/products?limit=6&page=${currentPage}&sort=1`);
         if (!response.ok) {
           throw new Error('Error al obtener las cards');
         }
@@ -91,10 +101,10 @@ export default function Album() {
         console.error(error);
       }
     };
-
     fetchCards();
   }, [currentPage]);
 
+  //style={styles.cartIcon}
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -103,11 +113,14 @@ export default function Album() {
           <Typography variant="h6" color="inherit" noWrap>
             Bienvenido
           </Typography>
-          <IconButton aria-label="cart" color="inherit" style={styles.cartIcon} onClick={() => handleLookAtCart()}>
-            <Badge badgeContent={4} color="secondary">
+            <div style={{ flexGrow: 1 }} />
+            <IconButton aria-label="cart" color="inherit" onClick={() => handleLookAtCart()}>
               <ShoppingCartIcon justifyContent='flex-end' />
-            </Badge>
-          </IconButton>
+            </IconButton>
+            <IconButton color="inherit" aria-label="logout" onClick={(event) => handleLogout(event)}>
+              <LogoutIcon />
+            </IconButton>
+
         </Toolbar>
       </AppBar>
       <main>
@@ -160,7 +173,7 @@ export default function Album() {
                     <Typography xs={12} >{card.description}</Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" onClick={() => handleAddToCart(card._id)}>
+                    <Button size="small" onClick={(event) => handleAddToCart(event, card._id)}>
                       Añadir al carrito
                     </Button>
                   </CardActions>

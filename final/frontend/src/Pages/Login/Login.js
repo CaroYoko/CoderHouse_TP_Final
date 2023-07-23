@@ -84,7 +84,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Iniciar sesión
           </Typography>
           <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
             <Controller
@@ -100,7 +100,7 @@ export default function SignIn() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   autoComplete="email"
                   autoFocus
@@ -124,7 +124,7 @@ export default function SignIn() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Contraseña"
                   type="password"
                   id="password"
                   autoComplete="current-password"
@@ -134,31 +134,22 @@ export default function SignIn() {
                   onChange={field.onChange}
                 />
               )}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+            />           
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Ingresar
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" onClick={() => navigate("/register")} variant="body2">
-                  Don't have an account? Sign Up
+                <Link href="#" onClick={() => navigate("/register")}  variant="body2">
+                ¿Aún no tienes una cuenta? Regístrate.
                 </Link>
               </Grid>
-            </Grid>
+            </Grid>            
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
