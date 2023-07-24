@@ -24,9 +24,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { useCallback } from 'react';
+import { URL } from '../const';
 
 const defaultTheme = createTheme();
-const PORT = 3000;
 
 function Title(props) {
   return (
@@ -55,7 +55,7 @@ export default function Orders() {
   const fetchProducts = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://localhost:${PORT}/api/carts/${cartid}`
+        `${URL}/api/carts/${cartid}`
       );
       if (!response.ok) {
         throw new Error('Error al obtener los productos');
@@ -87,7 +87,7 @@ export default function Orders() {
     let updatedProducts;
 
     try {
-      const response = await fetch(`http://localhost:${PORT}/api/carts/${cartid}/product/${productId}`, {
+      const response = await fetch(`${URL}/api/carts/${cartid}/product/${productId}`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ export default function Orders() {
 
   const handleFinalizePurchase = () => {
     // Call the endpoint to finalize the purchase
-    fetch(`http://localhost:${PORT}/api/carts/${cartid}/purchase`, {
+    fetch(`${URL}/api/carts/${cartid}/purchase`, {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${token}`,

@@ -14,22 +14,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { URL } from '../const';
 
-const PORT = 3000;
 const defaultTheme = createTheme();
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -40,7 +27,7 @@ export default function SignUp() {
   });
 
   const onSubmit = (data) => {
-    let url = `${window.location.protocol}//${window.location.hostname}:${PORT}/api/users`;
+    let url = `${URL}/api/users`;
     let user = {
       first_name: data.firstName,
       last_name: data.lastName,
@@ -257,8 +244,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 5 }} />
+        </Box> 
       </Container>
     </ThemeProvider>
   );
